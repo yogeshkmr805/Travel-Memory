@@ -46,7 +46,7 @@ mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/travelmemory?retr
 Keep this string; it goes into the backend `.env` in Step 3.
 
 Below is screenshot of the MongoDB Atlas setup:
-![alt text](screeshots/mongodb_setup.png)
+![alt text](screenshots/mongodb_setup.png)
 
 ### 2. Launch the Two Master Instances
 
@@ -69,7 +69,7 @@ SSH into each instance:
 ssh -i your-key.pem ubuntu@<public-ip>
 ```
 Below is screenshot of the EC2 instances setup:
-![alt text](screeshots/EC2_instances.png)
+![alt text](screenshots/EC2_instances.png)
 ### 3. Backend Setup (on `backend-master`)
 
 SSH into the backend instance and run:
@@ -89,11 +89,11 @@ PORT=3000
 ```
 Below is screenshot of the backend `.env` file configuration: 
 
-![alt text](screeshots/backend_env_setup.png)
+![alt text](screenshots/backend_env_setup.png)
 
 Test it: run `node index.js`, then in another terminal `curl localhost:3000/hello`. Stop with `Ctrl+C`.
 
-![alt text](screeshots/backend_running_SSH.png)
+![alt text](screenshots/backend_running_SSH.png)
 
 
 
@@ -130,7 +130,7 @@ sudo systemctl status travelmemory-backend
 > **Why systemd?** It restarts the app on crash and starts it automatically on boot. This matters because every instance launched from the AMI (Step 7) must bring up the backend on its own.
 
 Below is screenshot of the systemd service setup:
-![alt text](screeshots/backend_systemd_running.png)
+![alt text](screenshots/backend_systemd_running.png)
 #### Nginx reverse proxy
 
 Edit `/etc/nginx/sites-available/default` and replace the default `location /` with:
@@ -155,9 +155,9 @@ Verify:
 curl http://<backend-master-public-ip>/hello   # → Hello World!
 ```
 Below is screenshot of the Nginx reverse proxy setup on cmd and browser:
-![alt text](screeshots/backend_nginx_revereproxy.png)
+![alt text](screenshots/backend_nginx_revereproxy.png)
 
-![alt text](screeshots/backend_nginx_reverse_proxy_browser.png)
+![alt text](screenshots/backend_nginx_reverse_proxy_browser.png)
 
 ### 4. Frontend Setup (on `frontend-master`)
 
@@ -191,15 +191,15 @@ Open `http://<frontend-master-public-ip>` in a browser. Confirm:
 
 - Trips load. Below is screenshot of the frontend page of Trips loaded from MongoDB Atlas through the backend.
 
-    ![alt text](screeshots/frontend_trip_load.png)
+    ![alt text](screenshots/frontend_trip_load.png)
 - Adding a new experience works end to end (frontend → backend → Atlas). \
 Below is screenshot of the frontend page of adding new experience and the newly added experience loaded from MongoDB Atlas through the backend.
 
-    ![alt text](screeshots/frontend_add_experience.png)
+    ![alt text](screenshots/frontend_add_experience.png)
 
 - Below is screenshot of the MongoDB Atlas page of the newly added experiences:
 
-    ![alt text](screeshots/Mongodb_added_experiences.png)
+    ![alt text](screenshots/Mongodb_added_experiences.png)
 
 > **Do this before creating any AMI.** Anything broken here gets copied into every instance launched from the image.
 
@@ -212,7 +212,7 @@ In the EC2 console:
 3. Wait until both show status **Available** on the AMIs page.
  Below is screenshot of the AMIs created from the backend and frontend instances:
 
-    ![alt text](screeshots/ami.png)
+    ![alt text](screenshots/ami.png)
 
 ### 7. Launch Instance #2 From Each AMI
 
@@ -223,7 +223,7 @@ You now have 2 backend instances (`backend-master`, `backend-2`) and 2 frontend 
 
 Below is screenshot of the new backend and frontend instances launched from the AMIs:
 
-![alt text](screeshots/New_EC2_instances.png)
+![alt text](screenshots/New_EC2_instances.png)
 
 Because systemd was enabled before imaging, `backend-2` serves on port 3000 (via Nginx on 80) on boot. Confirm:
 
@@ -232,7 +232,7 @@ curl http://<backend-2-public-ip>/hello
 ```
 Below is screenshot of the backend-2 instance running and the curl command output:
 
-![alt text](screeshots/backend-2_running.png)
+![alt text](screenshots/backend-2_running.png)
 
 ### 8. Backend Target Group + Load Balancer
 
@@ -243,7 +243,7 @@ Below is screenshot of the backend-2 instance running and the curl command outpu
 
 Below is screenshot of the backend target group created and the backend instances registered:
 
-![alt text](screeshots/target_groups.png)
+![alt text](screenshots/target_groups.png)
 
 **Load Balancers**:
 
@@ -252,7 +252,7 @@ Below is screenshot of the backend target group created and the backend instance
 
 Below is screenshot of the backend load balancer created and the DNS name noted:
 
-![alt text](screeshots/backend_loadbalancer.png)
+![alt text](screenshots/backend_loadbalancer.png)
 
 ### 9. Frontend Target Group + Load Balancer
 
@@ -263,9 +263,9 @@ Below is screenshot of the backend load balancer created and the DNS name noted:
 
 Below is screenshot of the frontend target group and load balancer created and the DNS name noted:
 
-![alt text](screeshots/frontend_target_group.png)
+![alt text](screenshots/frontend_target_group.png)
 
-![alt text](screeshots/frontend_loadbalancer.png)
+![alt text](screenshots/frontend_loadbalancer.png)
 
 The frontend ALB DNS name alone is a valid way to test and submit if you skip DNS (Step 11).
 
@@ -290,17 +290,17 @@ sudo systemctl restart nginx
 
 Below is screenshot of the frontend ALB DNS name UI and the newly added experience loaded from MongoDB Atlas through the backend ALB:
 
-![alt text](screeshots/frontend_ALB_UI.png)
+![alt text](screenshots/frontend_ALB_UI.png)
 
 Below is the screenshot of the backend ALB DNS name UI:
 
-![alt text](screeshots/backend_ALB_UI.png)
+![alt text](screenshots/backend_ALB_UI.png)
 
 Below is screenshot of the frontend ALB DNS name and the newly added experience loaded from MongoDB Atlas through the backend ALB:
 
-![alt text](screeshots/frontend_ALB_UI_2.png)
+![alt text](screenshots/frontend_ALB_UI_2.png)
 
-![alt text](screeshots/frontend_ALB_UI_3.png)
+![alt text](screenshots/frontend_ALB_UI_3.png)
 
 ### 11. Cloudflare DNS Setup *(Optional — recommended)*
 
@@ -326,7 +326,7 @@ Then update `src/url.js` on both frontend instances to `https://api.yourdomain.c
 2. Add a new experience from the UI and confirm it saves and appears in the list.
 
 ## Deployment Architecture Diagram
-![alt text](screeshots/architecture.svg)
+![alt text](screenshots/architecture.svg)
 
 ## Repository Structure
 
